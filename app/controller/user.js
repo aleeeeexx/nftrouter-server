@@ -44,33 +44,32 @@ class UserController extends BaseController {
   }
   async register() {
     this.message('注册成功');
-    return;
-    const { ctx } = this;
-    try {
-      // 校验传递的参数
-      ctx.validate(createRule);
-    } catch (e) {
-      // console.log(e)
-      return this.error('参数校验失败', -1, e.errors);
-    }
+    // const { ctx } = this;
+    // try {
+    //   // 校验传递的参数
+    //   ctx.validate(createRule);
+    // } catch (e) {
+    //   // console.log(e)
+    //   return this.error('参数校验失败', -1, e.errors);
+    // }
 
-    const { email, passwd, captcha, nickname } = ctx.request.body;
+    // const { email, passwd, captcha, nickname } = ctx.request.body;
 
-    if (captcha.toUpperCase() !== ctx.session.captcha.toUpperCase()) {
-      return this.error('验证码错误');
-    }
-    if (await this.checkEmail(email)) {
-      this.error('邮箱重复啦');
-    } else {
-      const ret = await ctx.model.User.create({
-        email,
-        nickname,
-        passwd: md5(passwd + HashSalt),
-      });
-      if (ret._id) {
-        this.message('注册成功');
-      }
-    }
+    // if (captcha.toUpperCase() !== ctx.session.captcha.toUpperCase()) {
+    //   return this.error('验证码错误');
+    // }
+    // if (await this.checkEmail(email)) {
+    //   this.error('邮箱重复啦');
+    // } else {
+    //   const ret = await ctx.model.User.create({
+    //     email,
+    //     nickname,
+    //     passwd: md5(passwd + HashSalt),
+    //   });
+    //   if (ret._id) {
+    //     this.message('注册成功');
+    //   }
+    // }
 
     // this.success({name:'kkb'})
   }

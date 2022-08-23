@@ -18,6 +18,10 @@ module.exports = appInfo => {
   // add your middleware config here
   config.middleware = [];
 
+  config.cors = {
+    origin: 'http://localhost:8080',
+    allowMethods: 'GET,POST,PUT,HEAD',
+  };
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',
@@ -31,11 +35,11 @@ module.exports = appInfo => {
         enable: false,
       },
     },
-    mongoose: {
-      client: {
-        url: 'mongodb://127.0.0.1:27017/alexnft',
-        options: {},
-      },
-    },
+    // mongoose: {
+    //   client: {
+    //     url: 'mongodb://127.0.0.1:27017/alexnft',
+    //     options: {},
+    //   },
+    // },
   };
 };
