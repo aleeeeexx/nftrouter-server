@@ -35,11 +35,14 @@ module.exports = appInfo => {
         enable: false,
       },
     },
-    // mongoose: {
-    //   client: {
-    //     url: 'mongodb://127.0.0.1:27017/alexnft',
-    //     options: {},
-    //   },
-    // },
+    mongoose: {
+      client: {
+        url: 'mongodb://127.0.0.1:27017/alexnft',
+        options: {},
+      },
+    },
+    jwt: {
+      secret: ':alex@nft!@123',
+    },
   };
 };

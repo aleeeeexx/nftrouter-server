@@ -7,7 +7,9 @@ module.exports = app => {
   const { router, controller } = app;
   router.get('/', controller.home.index);
   router.get('/captcha', controller.util.captcha);
-  // const jwt = app.middleware.jwt({ app });
+  router.get('/getVerifyCode', controller.util.sendcode);
+
+  const jwt = app.middleware.jwt({ app });
   router.group({ name: 'user', prefix: '/user' }, router => {
     const {
       info,
@@ -28,7 +30,7 @@ module.exports = app => {
     router.post('/register', register);
     router.post('/login', login);
 
-    // router.get('/info', jwt, info);
+    router.get('/info', jwt, info);
     // router.put('/info', jwt, updateInfo);
     // router.get('/detail', jwt, info);
 

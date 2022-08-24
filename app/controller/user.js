@@ -3,7 +3,9 @@ const jwt = require('jsonwebtoken');
 const BaseController = require('./base');
 const createRule = {
   email: { type: 'email' },
+  phone: { type: 'phone' },
   nickname: { type: 'string' },
+  code: { type: 'string' },
   passwd: { type: 'string' },
   captcha: { type: 'string' },
 };
@@ -44,7 +46,7 @@ class UserController extends BaseController {
   }
   async register() {
     this.message('注册成功');
-    // const { ctx } = this;
+    const { ctx, app } = this;
     // try {
     //   // 校验传递的参数
     //   ctx.validate(createRule);
@@ -53,28 +55,44 @@ class UserController extends BaseController {
     //   return this.error('参数校验失败', -1, e.errors);
     // }
 
-    // const { email, passwd, captcha, nickname } = ctx.request.body;
+    const { email, passwd, captcha, nickname, phone, code } = ctx.request.body;
 
     // if (captcha.toUpperCase() !== ctx.session.captcha.toUpperCase()) {
     //   return this.error('验证码错误');
     // }
-    // if (await this.checkEmail(email)) {
-    //   this.error('邮箱重复啦');
-    // } else {
-    //   const ret = await ctx.model.User.create({
-    //     email,
-    //     nickname,
-    //     passwd: md5(passwd + HashSalt),
-    //   });
-    //   if (ret._id) {
-    //     this.message('注册成功');
-    //   }
-    // }
-
-    // this.success({name:'kkb'})
+    if (code !== ctx.session.phoneCode) {
+      return this.error('手机验证码错误');
+    }
+    let user;
+    if (await this.checkPhone(phone)) {
+      user = await ctx.model.User.findOne({
+        phone,
+      });
+    } else {
+      // 手机号不存在，创建一个
+      user = await ctx.model.User.create({
+        phone,
+      });
+    }
+    // 已经注册，给token
+    const accessToken = jwt.sign(
+      {
+        _id: user._id,
+        phone,
+      },
+      app.config.jwt.secret,
+      {
+        expiresIn: '100h',
+      }
+    );
+    this.success({ accessToken, phone });
   }
   async checkEmail(email) {
     const user = await this.ctx.model.User.findOne({ email });
+    return user;
+  }
+  async checkPhone(phone) {
+    const user = await this.ctx.model.User.findOne({ phone });
     return user;
   }
   async verify() {
@@ -88,8 +106,8 @@ class UserController extends BaseController {
   }
   async info() {
     const { ctx } = this;
-    const { email } = ctx.state;
-    const user = await this.checkEmail(email);
+    const { phone } = ctx.state;
+    const user = await this.checkPhone(phone);
     this.success(user);
   }
   async updateInfo() {
