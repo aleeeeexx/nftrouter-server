@@ -1,7 +1,7 @@
 /* eslint valid-jsdoc: "off" */
 
 'use strict';
-
+const path = require('path');
 /**
  * @param {Egg.EggAppInfo} appInfo app info
  */
@@ -13,15 +13,16 @@ module.exports = appInfo => {
   const config = (exports = {});
 
   // use for cookie sign key, should change to your own and keep security
-  config.keys = appInfo.name + '_1661156955088_7540';
+  config.keys = appInfo.name + '_1584231361040_3227';
 
+  config.multipart = {
+    mode: 'file',
+    whitelist: () => true,
+  };
+  config.UPLOAD_DIR = path.resolve(__dirname, '..', 'app/public');
   // add your middleware config here
   config.middleware = [];
 
-  config.cors = {
-    origin: '*',
-    allowMethods: 'GET,POST,PUT,HEAD',
-  };
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',
@@ -37,7 +38,7 @@ module.exports = appInfo => {
     },
     mongoose: {
       client: {
-        url: 'mongodb://127.0.0.1:27017/alexnft',
+        url: 'mongodb://mongo:27017/alexnft',
         options: {},
       },
     },

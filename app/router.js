@@ -30,7 +30,7 @@ module.exports = app => {
     router.post('/register', register);
     router.post('/login', login);
 
-    router.get('/info', jwt, info);
+    router.get('/usrInfo', jwt, info);
     // router.put('/info', jwt, updateInfo);
     // router.get('/detail', jwt, info);
 
